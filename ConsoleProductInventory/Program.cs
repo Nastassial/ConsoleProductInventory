@@ -1,6 +1,7 @@
 ﻿using ConsoleProductInventory.Classes.Commands;
 using ConsoleProductInventory.Classes;
 using ConsoleProductInventory.Interfaces;
+using ConsoleProductInventory.Classes.OutputProviders;
 
 Stock stock = new Stock();
 
@@ -12,13 +13,15 @@ stock.AddRange(new List<Product>()
     new Product(1003, "картофель", 4.1m, 70)
 });
 
+IOutputProvider provider = new ConsoleOutputProvider();
+
 List<ICommand> commands = new List<ICommand>
     {
         new ExitCommand(),
-        new AddProductCommand(stock),
-        new RemoveProductCommand(stock),
+        new AddProductCommand(stock, provider),
+        new RemoveProductCommand(stock, provider),
         new ClearStockCommand(stock),
-        new TakeProductCntCommand(stock)
+        new TakeProductCntCommand(stock, provider)
     };
 
 while (true)
@@ -44,6 +47,4 @@ while (true)
     {
         Console.WriteLine("Такой операции нет");
     }
-
-    Console.ReadLine();
 }

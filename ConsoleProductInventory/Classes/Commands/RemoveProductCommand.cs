@@ -2,17 +2,18 @@
 
 namespace ConsoleProductInventory.Classes.Commands;
 
-internal class RemoveProductCommand : ICommand
+internal class RemoveProductCommand : CommandBase
 {
     private readonly Stock _stock;
-    public string Description => "Удалить продукт из инвентаря";
 
-    public RemoveProductCommand(Stock stock)
+    public override string Description => "Удалить продукт из инвентаря";
+
+    public RemoveProductCommand(Stock stock, IOutputProvider outputProvider) : base(outputProvider)
     {
         _stock = stock;
     }
 
-    private string GetResult()
+    public override string GetResult()
     {
         Console.WriteLine("Введите товарный код продукта для удаления:");
 
@@ -25,10 +26,5 @@ internal class RemoveProductCommand : ICommand
         _stock.Remove(productId);
 
         return $"Продукт {productId} успешно удален";
-    }
-
-    public void Execute()
-    {
-        Console.WriteLine(GetResult());
     }
 }

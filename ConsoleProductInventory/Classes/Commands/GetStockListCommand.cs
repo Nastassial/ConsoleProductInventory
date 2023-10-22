@@ -2,18 +2,19 @@
 
 namespace ConsoleProductInventory.Classes.Commands;
 
-internal class GetStockListCommand : ICommand
+internal class GetStockListCommand : CommandBase
 {
     private readonly Stock _stock;
-    public string Description => "Получить список продуктов из инвентаря";
 
-    public GetStockListCommand(Stock stock)
+    public override string Description => "Получить список продуктов из инвентаря";
+
+    public GetStockListCommand(Stock stock, IOutputProvider outputProvider) : base(outputProvider)
     {
         _stock = stock;
     }
 
-    public void Execute()
+    public override string GetResult()
     {
-        Console.Write(_stock.GetProductList());
+        return _stock.GetProductList();
     }
 }

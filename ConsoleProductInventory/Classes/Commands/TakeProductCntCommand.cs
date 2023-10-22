@@ -3,17 +3,18 @@ using ConsoleProductInventory.Interfaces;
 
 namespace ConsoleProductInventory.Classes.Commands;
 
-internal class TakeProductCntCommand : ICommand
+internal class TakeProductCntCommand : CommandBase
 {
     private readonly Stock _stock;
-    public string Description => "Выбрать определенное количество продукта";
 
-    public TakeProductCntCommand(Stock stock)
+    public override string Description => "Выбрать определенное количество продукта";
+
+    public TakeProductCntCommand(Stock stock, IOutputProvider outputProvider) : base(outputProvider)
     {
         _stock = stock;
     }
 
-    private string GetResult()
+    public override string GetResult()
     {
         Console.WriteLine("Введите товарный код продукта:");
 
@@ -32,10 +33,5 @@ internal class TakeProductCntCommand : ICommand
             return "Данные введены неверно или превышено количество продукта в наличии!";
 
         return "Операция прошла успешно";
-    }
-
-    public void Execute()
-    {
-        Console.WriteLine(GetResult());
     }
 }

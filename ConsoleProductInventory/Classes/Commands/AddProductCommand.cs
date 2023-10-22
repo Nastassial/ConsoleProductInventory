@@ -2,20 +2,20 @@
 
 namespace ConsoleProductInventory.Classes.Commands;
 
-internal class AddProductCommand : ICommand
+internal class AddProductCommand : CommandBase
 {
-    private const string _errorMessage = "Error";
+    private const string _errorMessage = "Данные введены неверно!";
 
     private readonly Stock _stock;
 
-    public string Description => "Добавить продукт в инвентарь";
+    public override string Description => "Добавить продукт в инвентарь";
 
-    public AddProductCommand(Stock stock)
+    public AddProductCommand(Stock stock, IOutputProvider outputProvider) : base(outputProvider)
     {
         _stock = stock;
     }
 
-    private string GetResult()
+    public override string GetResult()
     {
         Console.WriteLine("Товарный код:");
 
@@ -47,18 +47,5 @@ internal class AddProductCommand : ICommand
         _stock.Add(product);
 
         return $"Продукт {productName} успешно добавлен";
-    }
-
-    public void Execute()
-    {
-        var result = GetResult();
-
-        if (result == _errorMessage)
-        {
-            Console.WriteLine("Данные введены неверно!");
-            return;
-        }
-
-        Console.WriteLine(result);
     }
 }

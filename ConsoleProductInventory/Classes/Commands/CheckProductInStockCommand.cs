@@ -2,17 +2,18 @@
 
 namespace ConsoleProductInventory.Classes.Commands;
 
-internal class CheckProductInStockCommand : ICommand
+internal class CheckProductInStockCommand : CommandBase
 {
     private readonly Stock _stock;
-    public string Description => "Проверить наличие продукта в инвентаре";
 
-    public CheckProductInStockCommand(Stock stock)
+    public override string Description => "Проверить наличие продукта в инвентаре";
+
+    public CheckProductInStockCommand(Stock stock, IOutputProvider outputProvider) : base(outputProvider)
     {
         _stock = stock;
     }
 
-    private string GetResult()
+    public override string GetResult()
     {
         var isParsed = int.TryParse(Console.ReadLine(), out int productId);
 
@@ -20,10 +21,5 @@ internal class CheckProductInStockCommand : ICommand
             return "Данный продукт есть в инвентаре";
 
         return "Данный продукт отсутствует в инвентаре";
-    }
-
-    public void Execute()
-    {
-        Console.WriteLine(GetResult());
     }
 }
