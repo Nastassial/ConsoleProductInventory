@@ -2,33 +2,38 @@
 
 internal class Product
 {
-    private readonly string _id;
+    private readonly int _id;
+    private readonly string _name;
     private decimal _price;
     private int _count;
 
-    public string Name { get => _id; }
-    public decimal Price { get => _price; set => _price = value; }
+    public int Id { get => _id; }
+    public string Name { get => _name; }
+    public decimal Price { get => _price; }
     public int Count { get => _count; set => _count = value; }
 
-    public Product(string id) => _id = id;
+    public Product(int id, string name)
+    {  
+        _id = id; 
+        _name = name;
+    }
 
-    public Product(string id, decimal price) : this(id) => Price = price;
+    public Product(int id, string name, decimal price) : this(id, name) => _price = price;
 
-    public Product(string id, decimal price, int count) : this(id, price) => Count = count;
+    public Product(int id, string name, decimal price, int count) : this(id, name, price) => Count = count;
 
     public bool Remove(int count)
     {
-        if (count <= 0) return false;
+        if (count <= 0 || Count < count) return false;
 
-        if (Count > count) 
-            Count -= count;
+        Count -= count;
 
         return true;
     }
 
     public bool Add(int count)
     {
-        if (count <= 0) return false;
+        if (count < 0) return false;
 
         Count += count;
 

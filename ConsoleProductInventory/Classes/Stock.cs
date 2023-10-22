@@ -1,4 +1,6 @@
-﻿namespace ConsoleProductInventory.Classes;
+﻿using System.Text;
+
+namespace ConsoleProductInventory.Classes;
 
 internal class Stock
 {
@@ -32,38 +34,52 @@ internal class Stock
 
         foreach (var product in Products)
         {
-            CommonCost += product.Price;
+            CommonCost += product.Price * product.Count;
         }
     }
 
-    public void Remove(int index)
+    public bool Remove(int index)
     {
-        Products.RemoveAt(index);
+        Product? product = GetProduct(index);
+
+        if (product == null) return false;
+
+        Remove(product);
 
         ComputeCommonCost();
+
+        return true;
     }
-    public void Remove(Product product)
+    public bool Remove(Product product)
     {
+        if (!Contains(product)) return false;
+
         Products.Remove(product);
 
         ComputeCommonCost();
+
+        return true;
     }
 
     public void RemoveRange(List<Product> products)
     {
         foreach (var product in products)
         {
-            Products.Remove(product);
+            Remove(product);
         }
 
         ComputeCommonCost();
     }
 
-    public void Add(Product product)
+    public bool Add(Product product)
     {
+        if (Contains(product)) return false;
+
         Products.Add(product);
 
         ComputeCommonCost();
+
+        return true;
     }
 
     public void AddRange(List<Product> products)
@@ -82,27 +98,38 @@ internal class Stock
 
     public bool Contains(Product product) => Products.Contains(product); 
 
-    public bool Contains(string name)
+    public bool Contains(int id)
     {
         foreach (var product in Products)
         {
-            if (product.Name == name) return true;
+            if (product.Id == id) return true;
         }
 
         return false;
     }
 
-    public Product GetProduct(int index) => Products[index];
+    public Product? GetProduct(int index)
+    {
+        foreach(var product in Products)
+        {
+            if (product.Id == index) 
+                return product;
+        }
+
+        return null;
+    }
 
     public string GetProductList() 
     {
-        string result = "";
+        StringBuilder result = new StringBuilder();
 
         for (int i = 0; i < Products.Count; i++)
         {
-            result += $"{i + 1}: Наименовение - {Products[i].Name}, цена - {Products[i].Price}, количество - {Products[i].Count}\n";
+            result.AppendLine($"{Products[i].Id}: Наименование - {Products[i].Name}, цена - {Products[i].Price}, количество - {Products[i].Count}");
         }
 
-        return result;
+        result.AppendLine($"\nОбщая стоимость товаров - {CommonCost}");
+
+        return result.ToString();
     }
 }

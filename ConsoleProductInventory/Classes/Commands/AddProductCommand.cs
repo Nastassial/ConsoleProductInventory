@@ -1,46 +1,64 @@
 ﻿using ConsoleProductInventory.Interfaces;
-using System.Text;
 
-namespace ConsoleProductInventory.Classes.Commands
+namespace ConsoleProductInventory.Classes.Commands;
+
+internal class AddProductCommand : ICommand
 {
-    internal class AddProductCommand : ICommand
+    private const string _errorMessage = "Error";
+
+    private readonly Stock _stock;
+
+    public string Description => "Добавить продукт в инвентарь";
+
+    public AddProductCommand(Stock stock)
     {
-        private readonly Stock _stock;
+        _stock = stock;
+    }
 
-        public string Description => "Добавить продукт в инвентарь";
+    private string GetResult()
+    {
+        Console.WriteLine("Товарный код:");
 
-        public AddProductCommand(Stock stock)
+        if (!int.TryParse(Console.ReadLine(), out int productId))
+            return _errorMessage;
+
+        Console.WriteLine("Наименовение:");
+
+        string? productName = Console.ReadLine();
+
+        if (productName == null)
+            return _errorMessage;
+
+        Console.WriteLine("Цена:");
+
+        if (!decimal.TryParse(Console.ReadLine(), out decimal productPrice))
+            return _errorMessage;
+
+        Console.WriteLine("Количество:");
+
+        if (!int.TryParse(Console.ReadLine(), out int productCnt))
+            return _errorMessage;
+
+        Product product = new Product(productId, productName, productPrice, productCnt);
+
+        if (_stock.Contains(productId))
+            return "Такой товар уже есть в инвентаре";
+
+        _stock.Add(product);
+
+        return $"Продукт {productName} успешно добавлен";
+    }
+
+    public void Execute()
+    {
+        var result = GetResult();
+
+        if (result == _errorMessage)
         {
-            _stock = stock;
+            Console.WriteLine("Данные введены неверно!");
+            return;
         }
 
-        private string GetResult()
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-
-            Console.WriteLine("Наименовение:");
-
-            string productName = Console.ReadLine() ?? "Неизвестно";
-
-            Console.WriteLine("Цена:");
-
-            decimal productPrice = Convert.ToDecimal(Console.ReadLine());
-
-            Console.WriteLine("Количество:");
-
-            int productCnt = Convert.ToInt32(Console.ReadLine());
-
-            Product product = new Product(productName, productPrice, productCnt);
-
-            _stock.Add(product);
-
-            stringBuilder.AppendLine("Продукт успешно добавлен");
-
-            return stringBuilder.ToString();
-        }
-        public void Execute()
-        {
-            Console.WriteLine(GetResult());
-        }
+        Console.WriteLine(result);
     }
 }

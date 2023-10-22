@@ -14,19 +14,21 @@ internal class RemoveProductCommand : ICommand
 
     private string GetResult()
     {
-        Console.WriteLine("Выберите продукт для удаления:");
+        Console.WriteLine("Введите товарный код продукта для удаления:");
 
-        Console.Write(_stock.GetProductList());
+        if (!int.TryParse(Console.ReadLine(), out int productId)) 
+            return "Данные введены неверно!";
 
-        return Console.ReadLine() ?? "0";
+        if (!_stock.Contains(productId))
+            return "Такого товара нет в инвентаре!";
+
+        _stock.Remove(productId);
+
+        return $"Продукт {productId} успешно удален";
     }
 
     public void Execute()
     {
-        int userChoice = Convert.ToInt32(GetResult()) - 1;
-
-        _stock.Remove(userChoice);
-
-        Console.WriteLine("Продукт успешно удален");
+        Console.WriteLine(GetResult());
     }
 }

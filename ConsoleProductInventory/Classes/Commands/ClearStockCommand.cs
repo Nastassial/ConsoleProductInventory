@@ -15,6 +15,5 @@ internal class ClearStockCommand : ICommand
     public void Execute()
     {
         _stock.Clear();
-        Console.WriteLine("Инвентарь пуст");
     }
 }

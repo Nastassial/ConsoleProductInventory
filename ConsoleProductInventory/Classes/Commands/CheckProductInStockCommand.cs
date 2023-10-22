@@ -14,13 +14,14 @@ internal class CheckProductInStockCommand : ICommand
 
     private string GetResult()
     {
-        string prodName = Console.ReadLine() ?? "Неизвестно";
+        var isParsed = int.TryParse(Console.ReadLine(), out int productId);
 
-        if (_stock.Contains(prodName))
+        if (isParsed && _stock.Contains(productId))
             return "Данный продукт есть в инвентаре";
 
         return "Данный продукт отсутствует в инвентаре";
     }
+
     public void Execute()
     {
         Console.WriteLine(GetResult());
