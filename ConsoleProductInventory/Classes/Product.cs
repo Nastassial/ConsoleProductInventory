@@ -5,12 +5,11 @@ internal class Product
     private readonly int _id;
     private readonly string _name;
     private decimal _price;
-    private int _count;
 
     public int Id { get => _id; }
     public string Name { get => _name; }
     public decimal Price { get => _price; }
-    public int Count { get => _count; set => _count = value; }
+    public int Count { get; private set; }
 
     public Product(int id, string name)
     {  

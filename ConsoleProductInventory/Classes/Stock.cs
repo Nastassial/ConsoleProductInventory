@@ -4,26 +4,24 @@ namespace ConsoleProductInventory.Classes;
 
 internal class Stock
 {
-    private static readonly List<Product> _emptyProductList = new List<Product>(0);
+    private List<Product> _products;
 
-    private List<Product> Products;
-
-    public int ProductTypesCount => Products.Count;
+    public int ProductTypesCount => _products.Count;
 
     public decimal CommonCost { get; private set; }
 
     public Stock()
     {
-        Products = _emptyProductList;
+        _products = new List<Product>(0);
         CommonCost = 0;
     }
     
     public Stock(List<Product> products) 
     {
-        if (products == null) 
-            Products = _emptyProductList;
+        if (products == null)
+            _products = new List<Product>(0);
         else
-            Products = products;
+            _products = new List<Product>(products);
 
         ComputeCommonCost();
     }
@@ -32,7 +30,7 @@ internal class Stock
     {
         CommonCost = 0;
 
-        foreach (var product in Products)
+        foreach (var product in _products)
         {
             CommonCost += product.Price * product.Count;
         }
@@ -54,7 +52,7 @@ internal class Stock
     {
         if (!Contains(product)) return false;
 
-        Products.Remove(product);
+        _products.Remove(product);
 
         ComputeCommonCost();
 
@@ -75,7 +73,7 @@ internal class Stock
     {
         if (Contains(product)) return false;
 
-        Products.Add(product);
+        _products.Add(product);
 
         ComputeCommonCost();
 
@@ -84,23 +82,23 @@ internal class Stock
 
     public void AddRange(List<Product> products)
     {
-        Products.AddRange(products);
+        _products.AddRange(products);
 
         ComputeCommonCost();
     }
 
     public void Clear()
     {
-        Products.Clear();
+        _products.Clear();
 
         CommonCost = 0;
     }
 
-    public bool Contains(Product product) => Products.Contains(product); 
+    public bool Contains(Product product) => _products.Contains(product); 
 
     public bool Contains(int id)
     {
-        foreach (var product in Products)
+        foreach (var product in _products)
         {
             if (product.Id == id) return true;
         }
@@ -110,7 +108,7 @@ internal class Stock
 
     public Product? GetProduct(int index)
     {
-        foreach(var product in Products)
+        foreach(var product in _products)
         {
             if (product.Id == index) 
                 return product;
@@ -123,9 +121,9 @@ internal class Stock
     {
         StringBuilder result = new StringBuilder();
 
-        for (int i = 0; i < Products.Count; i++)
+        for (int i = 0; i < _products.Count; i++)
         {
-            result.AppendLine($"{Products[i].Id}: Наименование - {Products[i].Name}, цена - {Products[i].Price}, количество - {Products[i].Count}");
+            result.AppendLine($"{_products[i].Id}: Наименование - {_products[i].Name}, цена - {_products[i].Price}, количество - {_products[i].Count}");
         }
 
         result.AppendLine($"\nОбщая стоимость товаров - {CommonCost}");
